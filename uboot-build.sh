@@ -2,8 +2,6 @@
 
 #Builds uboot (v2016.11-rc1) and associated dependencies for the TK1
 
-set -e
-
 if [ $UID -ne 0 ]
 then
     echo "Must be root to execute"
@@ -27,11 +25,13 @@ apt-get install -y autoconf pkg-config libusb-1.0-0-dev libcrypto++-dev
 mkdir -p /src/uboot
 cd /src/uboot
 # Get all the required stuff
-git clone https://github.com/NVIDIA/tegra-uboot-flasher-scripts.git || true
-git clone https://github.com/NVIDIA/tegrarcm.git || true
-git clone https://github.com/NVIDIA/cbootimage.git || true
-git clone --depth 1 --branch "v2016.11-rc1" git://git.denx.de/u-boot.git u-boot/ || true
-git clone https://git.kernel.org/pub/scm/utils/dtc/dtc.git || true
+git clone https://github.com/NVIDIA/tegra-uboot-flasher-scripts.git
+git clone https://github.com/NVIDIA/tegrarcm.git
+git clone https://github.com/NVIDIA/cbootimage.git
+git clone https://github.com/NVIDIA/cbootimage-configs.git
+
+git clone --depth 1 --branch "v2016.11-rc1" git://git.denx.de/u-boot.git u-boot
+git clone https://git.kernel.org/pub/scm/utils/dtc/dtc.git
 
 #patch jetson configs for u-boot to enable hyp mode
 cat /src/build/hyp_enable >> /src/uboot/u-boot/configs/jetson-tk1_defconfig
@@ -58,7 +58,13 @@ echo 'export PATH=$PATH:/src/uboot/cbootimage/src:/src/uboot/tegrarcm/src:/src/u
 cd tegra-uboot-flasher-scripts
 export CROSS_COMPILE=arm-linux-gnueabihf-
 ./build --socs tegra124 --boards jetson-tk1 build
+if [ $? -ne 0 ]
+then
+    echo "uboot build unsuccessful"
+    exit 1
+fi
 
 
 echo "Build complete. To continue, place the Jetson TK1 in recovery mode before proceeding"
-echo "To flash uboot on the TK1, log in to the vagrant VM with 'vagrant ssh', then cd /src/uboot/tegra-uboot-flasher-scripts -> ./tegra-uboot-flasher flash jetson-tk1"
+echo "To flash uboot on the TK1, log in to the vagrant VM with 'vagrant halt && vagrant up && vagrant ssh'" 
+echo "then sudo -i -> cd /src/uboot/tegra-uboot-flasher-scripts -> ./tegra-uboot-flasher flash jetson-tk1"

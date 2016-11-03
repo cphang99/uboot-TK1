@@ -3,6 +3,7 @@ Vagrant.configure(2) do |config|
   config.vm.network "private_network", type: "dhcp"
   config.vm.synced_folder ".", "/src/build"
   config.vm.provider "virtualbox" do |vb|
+    vb.gui = true
     # Customize the VM:
     vb.memory = "1024"
     vb.cpus = "1"
