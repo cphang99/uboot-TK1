@@ -31,4 +31,3 @@ Then within uboot (before bootloader is triggered) set the following env variabl
 setenv bootm_boot_mode nonsec
 saveenv
 ```
-- 
