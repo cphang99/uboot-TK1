@@ -27,11 +27,11 @@ apt-get install -y autoconf pkg-config libusb-1.0-0-dev libcrypto++-dev
 mkdir -p /src/uboot
 cd /src/uboot
 # Get all the required stuff
-git clone https://github.com/NVIDIA/tegra-uboot-flasher-scripts.git
-git clone https://github.com/NVIDIA/tegrarcm.git
-git clone https://github.com/NVIDIA/cbootimage.git
-git clone --depth 1 --branch "v2016.11-rc1" git://git.denx.de/u-boot.git u-boot/
-git clone https://git.kernel.org/pub/scm/utils/dtc/dtc.git
+git clone https://github.com/NVIDIA/tegra-uboot-flasher-scripts.git || true
+git clone https://github.com/NVIDIA/tegrarcm.git || true
+git clone https://github.com/NVIDIA/cbootimage.git || true
+git clone --depth 1 --branch "v2016.11-rc1" git://git.denx.de/u-boot.git u-boot/ || true
+git clone https://git.kernel.org/pub/scm/utils/dtc/dtc.git || true
 
 #patch jetson configs for u-boot to enable hyp mode
 cat /src/build/hyp_enable >> /src/uboot/u-boot/configs/jetson-tk1_defconfig
@@ -54,7 +54,7 @@ make
 cd ..
 
 # build u-boot
-cat export PATH=$PATH:/src/uboot/cbootimage/src:/src/uboot/tegrarcm/src:/src/uboot/dtc >> ~/.profile && source ~/.profile
+echo 'export PATH=$PATH:/src/uboot/cbootimage/src:/src/uboot/tegrarcm/src:/src/uboot/dtc' >> ~/.profile && source ~/.profile
 cd tegra-uboot-flasher-scripts
 export CROSS_COMPILE=arm-linux-gnueabihf-
 ./build --socs tegra124 --boards jetson-tk1 build
