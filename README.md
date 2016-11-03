@@ -5,6 +5,11 @@ Can be used in conjunction with https://github.com/CodethinkLabs/jailhouse-tk1
 
 Based on guide described here: https://blog.ramses-pyramidenbau.de/?p=342
 
+##Requirements
+- Vagrant (1.8.5)
+- Virtualbox and guest additions
+- Ensure virtualbox can access USB devices
+
 ##Usage
 Runs in 4 phases:
 - Build uboot using Vagrant box
